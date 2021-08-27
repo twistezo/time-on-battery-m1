@@ -1,0 +1,38 @@
+{
+  "name": "@twistezo/time-on-battery-m1",
+  "version": "1.0.0",
+  "description": "Mac OS app for measure real elapsed time on battery between charging. Without sleeping time unlike system's Activity Monitor counts. Requires Big Sur and M1 processor.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/twistezo/time-on-battery-m1.git"
+  },
+  "bugs": {
+    "url": "https://github.com/twistezo/time-on-battery-m1/issues"
+  },
+  "homepage": "https://github.com/twistezo/time-on-battery-m1",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "start:build": "node build/index.js",
+    "build": "rm -rf build && tsc",
+    "prepublish": "npm run build"
+  },
+  "author": "twistezo",
+  "license": "MIT",
+  "dependencies": {
+    "@types/cron": "^1.7.3",
+    "@types/figlet": "^1.5.4",
+    "@types/shelljs": "^0.8.9",
+    "chalk": "^4.1.2",
+    "commander": "^8.1.0",
+    "cron": "^1.8.2",
+    "figlet": "^1.5.2",
+    "moment": "^2.29.1",
+    "moment-timezone": "^0.5.33",
+    "shelljs": "^0.8.4",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.2"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  }
+}
