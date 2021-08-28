@@ -1,31 +1,36 @@
 import { Command } from 'commander'
 import figlet from 'figlet'
 import chalk from 'chalk'
-// import moment from 'moment'
-import { appName, description } from './constants'
+import { APP_NAME, DESCRIPTION } from './constants'
 import { cronJob } from './cron'
 
-console.log(chalk.cyan(figlet.textSync(appName)))
-console.log(chalk.gray(description))
+console.log(chalk.cyan(figlet.textSync(APP_NAME)))
+console.log(chalk.gray(DESCRIPTION))
 
 const cli = new Command()
 cli
-  .description(description)
-  .option('-d, --debug', 'output extra debugging')
-  .option('-s, --service', 'run service')
-  .option('-l, --log <last>', 'show n last logs', '10')
-  .option('-o, --open', 'open log file')
+  .description(DESCRIPTION)
   .version('1.0.0', '-v, --version', 'output the current version')
-  .parse(process.argv)
+  .option('-d, --debug', 'output extra debugging')
+  .option('-o, --open', 'open log file')
 
-const options = cli.opts()
-if (options.debug) {
-  console.log(options)
-} else if (options.open) {
-  console.log('Opening log file...')
-} else if (options.service) {
-  console.log(`Running service...`)
-  cronJob.start()
-} else if (options.log) {
-  console.log(`Last ${options.log} logs:`)
-}
+// l -q 2 OR log -q 2
+cli
+  .command('log', { isDefault: true })
+  .alias('l')
+  .option('-q, --quantity <number>', 'show n last logs', '10')
+  .description('show last 10 logs')
+  .action(options => {
+    console.log(`Last ${options.quantity} logs:`)
+  })
+
+cli
+  .command('run')
+  .alias('r')
+  .description('run service in background')
+  .action(() => {
+    console.log(`Running service...`)
+    cronJob.start()
+  })
+
+cli.parse(process.argv)

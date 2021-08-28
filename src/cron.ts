@@ -1,25 +1,48 @@
 import { CronJob } from 'cron'
-// import moment from 'moment'
+import moment from 'moment'
 import momentTimezone from 'moment-timezone'
 import shell from 'shelljs'
-import { displayBrightnessCmd, isChargingCmd } from './constants'
+import {
+  DISPLAY_BRIGHTNESS_CMD,
+  IS_CHARGING_CMD,
+  DATA_FILENAME,
+  DATA_HEADERS,
+  CSV_SEPARATOR,
+} from './constants'
+import fs from 'fs'
+import os from 'os'
+import { Brightness, Data, IsCharging, IsChargingRaw } from './types'
 
-// const cronTime = '1 * * * * *' // every 1 minute (http://crontab.org/)
-// TODO: remove
-const cronTime = '* * * * * *' // every 1 minute (http://crontab.org/)
+// Is notebook connected to the charger?
+const getIsCharging = (): IsCharging =>
+  (shell.exec(IS_CHARGING_CMD, { silent: true }).toString().replace(/\n/g, '') as IsChargingRaw) ===
+  'Yes'
+    ? 1
+    : 0
 
-export const cronJob = new CronJob(
-  cronTime,
-  () => {
-    // Is notebook connected to charger? `Yes` or `No`
-    const isCharging = shell.exec(isChargingCmd, { silent: true }).toString()
-    console.log('Is charging?', isCharging)
+// Show display brightness
+const getDisplayBrightness = (): Brightness =>
+  parseFloat(shell.exec(DISPLAY_BRIGHTNESS_CMD, { silent: true }).toString())
 
-    // Show current display brightness
-    const displayBrightness = shell.exec(displayBrightnessCmd, { silent: true }).toString()
-    console.log('Display brightness:', displayBrightness)
-  },
-  null,
-  true,
-  momentTimezone.tz.guess()
-)
+const writeDataToFile = (data: Data, filename: string) => {
+  const writeStream = fs.createWriteStream(filename, { flags: 'a' })
+
+  fs.stat(filename, err => {
+    if (err == null) {
+      // File exists
+      writeStream.write(data.join(CSV_SEPARATOR) + os.EOL)
+    } else if (err.code === 'ENOENT') {
+      // File does not exists
+      writeStream.write(DATA_HEADERS.join(CSV_SEPARATOR) + os.EOL)
+      writeStream.write(data.join(CSV_SEPARATOR) + os.EOL)
+    }
+  })
+}
+
+const cronFn = () => {
+  const data: Data = [moment(), getIsCharging(), getDisplayBrightness()]
+  console.log(data)
+  writeDataToFile(data, DATA_FILENAME)
+}
+
+export const cronJob = new CronJob('* * * * * *', cronFn, null, false, momentTimezone.tz.guess())
