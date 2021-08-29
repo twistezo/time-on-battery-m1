@@ -14,6 +14,8 @@ Without sleeping time unlike in system's Activity Monitor.
 - yarn: `yarn global add @twistezo/time-on-battery-m1`
 - build locally or download executable binary file from GitHub and use it
 
+Note that to running downloaded binary it's necessary to add permissions: `sudo chmod 755 ./time-on-battery-m1`.
+
 ## Usage
 
 Run in terminal: `tob`, `time-on-battery` or `time-on-battery-m1`.
