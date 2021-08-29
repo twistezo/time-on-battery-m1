@@ -73,7 +73,7 @@ export const generateLogs = (last: number): void => {
       const ltob = calculateLastTimesOnBattery(data, last)
       printLogs(ltob)
     } else if (err.code === 'ENOENT') {
-      console.log('Log file not found or empty.\nRun service first -> "tob run" or "tob r.')
+      console.log('Error. Log file not found or empty.\nRun service with argument "run".')
     }
   })
 }

@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { Command } from 'commander'
 import figlet from 'figlet'
 import chalk from 'chalk'
@@ -9,11 +11,7 @@ console.log(chalk.cyan(figlet.textSync(APP_NAME)))
 console.log(chalk.gray(DESCRIPTION))
 
 const cli = new Command()
-cli
-  .description(DESCRIPTION)
-  .version('1.0.0', '-v, --version', 'output the current version')
-  .option('-d, --debug', 'output extra debugging')
-  .option('-o, --open', 'open log file')
+cli.description(DESCRIPTION).version('1.0.0', '-v, --version', 'output the current version')
 
 // l -q 2 OR log -q 2
 cli
