@@ -3,6 +3,7 @@ import figlet from 'figlet'
 import chalk from 'chalk'
 import { APP_NAME, DESCRIPTION } from './constants'
 import { cronJob } from './cron'
+import { generateLogs } from './log'
 
 console.log(chalk.cyan(figlet.textSync(APP_NAME)))
 console.log(chalk.gray(DESCRIPTION))
@@ -21,7 +22,9 @@ cli
   .option('-q, --quantity <number>', 'show n last logs', '10')
   .description('show last 10 logs')
   .action(options => {
-    console.log(`Last ${options.quantity} logs:`)
+    const { quantity } = options
+    console.log(chalk.cyan(`Last ${quantity} logs:`))
+    generateLogs(quantity)
   })
 
 cli
@@ -29,7 +32,7 @@ cli
   .alias('r')
   .description('run service in background')
   .action(() => {
-    console.log(`Running service...`)
+    console.log(`Service is running...`)
     cronJob.start()
   })
 

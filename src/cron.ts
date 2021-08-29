@@ -8,19 +8,19 @@ import {
   DATA_FILENAME,
   DATA_HEADERS,
   CSV_SEPARATOR,
+  DATE_FORMAT,
 } from './constants'
 import fs from 'fs'
 import os from 'os'
 import { Brightness, Data, IsCharging, IsChargingRaw } from './types'
+import { formatDate } from './utils'
 
-// Is notebook connected to the charger?
 const getIsCharging = (): IsCharging =>
   (shell.exec(IS_CHARGING_CMD, { silent: true }).toString().replace(/\n/g, '') as IsChargingRaw) ===
   'Yes'
     ? 1
     : 0
 
-// Show display brightness
 const getDisplayBrightness = (): Brightness =>
   parseFloat(shell.exec(DISPLAY_BRIGHTNESS_CMD, { silent: true }).toString())
 
@@ -29,10 +29,8 @@ const writeDataToFile = (data: Data, filename: string) => {
 
   fs.stat(filename, err => {
     if (err == null) {
-      // File exists
       writeStream.write(data.join(CSV_SEPARATOR) + os.EOL)
     } else if (err.code === 'ENOENT') {
-      // File does not exists
       writeStream.write(DATA_HEADERS.join(CSV_SEPARATOR) + os.EOL)
       writeStream.write(data.join(CSV_SEPARATOR) + os.EOL)
     }
@@ -40,8 +38,7 @@ const writeDataToFile = (data: Data, filename: string) => {
 }
 
 const cronFn = () => {
-  const data: Data = [moment(), getIsCharging(), getDisplayBrightness()]
-  console.log(data)
+  const data: Data = [formatDate(moment(), DATE_FORMAT), getIsCharging(), getDisplayBrightness()]
   writeDataToFile(data, DATA_FILENAME)
 }
 
