@@ -1,3 +1,4 @@
-node_modules
+bin
 build
+node_modules
 tob-data.csv

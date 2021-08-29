@@ -1,7 +1,21 @@
 {
   "name": "@twistezo/time-on-battery-m1",
-  "version": "1.0.0",
+  "bin": {
+    "tob": "build/index.js",
+    "time-on-battery": "build/index.js",
+    "time-on-battery-m1": "build/index.js"
+  },
+  "version": "1.0.4",
   "description": "Mac OS app for measure real elapsed time on battery between charging. Without sleeping time unlike in system's Activity Monitor. Requires Big Sur and M1 processor.",
+  "homepage": "https://github.com/twistezo/time-on-battery-m1",
+  "author": "twistezo",
+  "license": "MIT",
+  "keywords": [
+    "time",
+    "battery",
+    "m1",
+    "macos"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/twistezo/time-on-battery-m1.git"
@@ -9,15 +23,14 @@
   "bugs": {
     "url": "https://github.com/twistezo/time-on-battery-m1/issues"
   },
-  "homepage": "https://github.com/twistezo/time-on-battery-m1",
   "scripts": {
     "start": "ts-node src/index.ts",
     "start:build": "npm run build && node build/index.js",
     "build": "rm -rf build && tsc",
-    "prepublish": "npm run build"
+    "build:bin": "npx pkg package.json",
+    "prepublishOnly": "npm run build && npm run build:bin",
+    "publish": "npm publish --access public"
   },
-  "author": "twistezo",
-  "license": "MIT",
   "dependencies": {
     "@types/cron": "^1.7.3",
     "@types/figlet": "^1.5.4",
@@ -33,11 +46,16 @@
     "figlet": "^1.5.2",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
+    "pkg": "^5.3.1",
     "shelljs": "^0.8.4",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.2"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
+  "pkg": {
+    "targets": [
+      "arm64"
+    ],
+    "assets": "node_modules/figlet/fonts/*",
+    "outputPath": "bin"
   }
 }
