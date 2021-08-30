@@ -45,10 +45,11 @@ For example run `tob r` as a background service and in the other terminal tab ru
 
 ## Development
 
+- Install dependencies: `npm install`
 - Start dev (TS): `npm run start`
 - Build (JS): `npm run build`
 - Start build (JS): `npm run start:build`
-- Publish to npm: `npm login && npm run publish`
+- Publish to npm: `npm login && npm publish`
 - Build arm64 binary: `npm run build:bin`
 
 ## Example
