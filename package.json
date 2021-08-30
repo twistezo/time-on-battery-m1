@@ -5,7 +5,7 @@
     "time-on-battery": "build/index.js",
     "time-on-battery-m1": "build/index.js"
   },
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Mac OS app for measure real elapsed time on battery between charging. Without sleeping time unlike in system's Activity Monitor. Requires Big Sur and M1 processor.",
   "homepage": "https://github.com/twistezo/time-on-battery-m1",
   "author": "twistezo",
@@ -28,8 +28,7 @@
     "start:build": "npm run build && node build/index.js",
     "build": "rm -rf build && tsc",
     "build:bin": "npx pkg package.json",
-    "prepublishOnly": "npm run build && npm run build:bin",
-    "publish": "npm publish --access public"
+    "prepublishOnly": "npm run build && npm run build:bin"
   },
   "dependencies": {
     "@types/cron": "^1.7.3",
