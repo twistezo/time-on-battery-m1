@@ -1,6 +1,5 @@
 import { CronJob } from 'cron'
 import moment from 'moment'
-import momentTimezone from 'moment-timezone'
 import shell from 'shelljs'
 import {
   DISPLAY_BRIGHTNESS_CMD,
@@ -42,4 +41,4 @@ const cronFn = () => {
   writeDataToFile(data, DATA_FILENAME)
 }
 
-export const cronJob = new CronJob('1 * * * * *', cronFn, null, false, momentTimezone.tz.guess())
+export const cronJob = new CronJob('1 * * * * *', cronFn, null, false)
