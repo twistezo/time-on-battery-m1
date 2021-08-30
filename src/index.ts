@@ -5,7 +5,7 @@ import figlet from 'figlet'
 import chalk from 'chalk'
 import { APP_NAME, DESCRIPTION } from './constants'
 import { cronJob } from './cron'
-import { generateLogs } from './log'
+import { generateLogs } from './logs'
 
 console.log(chalk.cyan(figlet.textSync(APP_NAME)))
 console.log(chalk.gray(DESCRIPTION))
