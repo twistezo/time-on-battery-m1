@@ -36,9 +36,9 @@ const calculateLastTimesOnBattery = (data: Data[], last: number) => {
   let lastChargingIndex: number | null = null // to excluding neighbors numbers
 
   data.forEach((d: Data, i: number) => {
-    const [date, isCharging] = d
+    const [date, isCharging, brightness] = d
 
-    if (isCharging === 1) {
+    if (isCharging === 1 && brightness > 0) {
       if (lastChargingDate === null) {
         lastChargingDate = date
         lastChargingIndex = i
@@ -62,7 +62,7 @@ const calculateLastTimesOnBattery = (data: Data[], last: number) => {
 const printLogs = (logs: Log[]) => {
   logs.forEach((l: Log, i: number) => {
     const [dateFrom, dateTo, timeOnBattery] = l
-    console.log(`${i + 1}. ${dateFrom} - ${dateTo}: ${chalk.green(timeOnBattery)}`)
+    console.log(`${chalk.cyan(i + 1)}. ${dateFrom} - ${dateTo} -> ${chalk.green(timeOnBattery)}`)
   })
 }
 

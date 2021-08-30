@@ -21,7 +21,7 @@ cli
   .description('show last 10 logs')
   .action(options => {
     const { quantity } = options
-    console.log(chalk.cyan(`Last ${quantity} logs:`))
+    console.log(chalk.cyan(`Last ${quantity} logs`))
     generateLogs(quantity)
   })
 
