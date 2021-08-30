@@ -50,3 +50,7 @@ For example run `tob r` as a background service and in the other terminal tab ru
 - Start build (JS): `npm run start:build`
 - Publish to npm: `npm login && npm run publish`
 - Build arm64 binary: `npm run build:bin`
+
+## Example
+
+ <img src="https://i.imgur.com/EYXAHnl.png">
