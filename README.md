@@ -29,9 +29,19 @@ Options:
 Commands:
   log|l [options]  show last 10 logs
   run|r            run service in background
+  help [command]   display help for command
 ```
 
-For example run `tob r` as a background service and in the other terminal tab run `tob` or `tob 20` for 10 (default) or 20 last logs.
+```
+Usage: tob log|l [options]
+
+show last 10 logs
+
+Options:
+  -q, --quantity <number>  show n last logs (default: "10")
+```
+
+For example run `tob r` as a background service and in the other terminal tab run `tob` or `tob l -q 20` for 10 (default) or 20 last logs.
 
 ## Development
 
