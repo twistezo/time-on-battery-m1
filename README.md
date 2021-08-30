@@ -8,7 +8,7 @@ Without sleeping time unlike in system's Activity Monitor.
 - MacOS Big Sur
 - M1 processor
 
-## Installation options
+## Installation
 
 - npm: `npm install -g @twistezo/time-on-battery-m1`
 - yarn: `yarn global add @twistezo/time-on-battery-m1`
@@ -18,7 +18,7 @@ Note that to running downloaded binary it's necessary to add permissions: `sudo 
 
 ## Usage
 
-Run in terminal: `tob`, `time-on-battery` or `time-on-battery-m1`.
+Run in terminal `tob`, `time-on-battery` or `time-on-battery-m1`.
 
 ```
 Usage: tob [options] [command]
