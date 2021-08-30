@@ -6,7 +6,7 @@ Without sleeping time unlike in system's Activity Monitor.
 ## Requirements
 
 - MacOS Big Sur
-- M1 processor
+- M1 processor (arm64)
 
 ## Installation
 
@@ -18,7 +18,31 @@ Note that to running downloaded binary it's necessary to add permissions: `sudo 
 
 ## Usage
 
-Run in terminal `tob`, `time-on-battery` or `time-on-battery-m1`.
+### Standard way
+
+From npm/yarn you can use globally names:
+
+- `tob`
+- `time-on-battery`
+- `time-on-battery-m1`
+
+Run in terminal `tob r` and in the other tab run `tob` or `tob l -q 20` for 10 (default) or 20 last logs. You can find logs in `tob-data.csv` file which is updated every 1 minute and placed in path where you did run `tob r`.
+
+### Background service
+
+1. Install `pm2` process manager for running app service in background
+
+   `npm install pm2 -g`
+
+2. Start app service
+
+   `pm2 start tob -- run`
+
+3. You can check current status by `pm2 list` or in `tob-data.csv` file.
+
+4. You can restart service `pm2 restart tob` or stop `pm2 stop tob`.
+
+## Commands
 
 ```
 Usage: tob [options] [command]
@@ -29,7 +53,6 @@ Options:
 Commands:
   log|l [options]  show last 10 logs
   run|r            run service in background
-  help [command]   display help for command
 ```
 
 ```
@@ -41,8 +64,6 @@ Options:
   -q, --quantity <number>  show n last logs (default: "10")
 ```
 
-For example run `tob r` as a background service and in the other terminal tab run `tob` or `tob l -q 20` for 10 (default) or 20 last logs.
-
 ## Development
 
 - Install dependencies: `npm install`
@@ -52,6 +73,6 @@ For example run `tob r` as a background service and in the other terminal tab ru
 - Publish to npm: `npm login && npm publish`
 - Build arm64 binary: `npm run build:bin`
 
-## Example
+## Screenshot
 
  <img src="https://i.imgur.com/EYXAHnl.png">
