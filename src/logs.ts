@@ -1,8 +1,9 @@
 import chalk from 'chalk'
 import fs from 'fs'
 import os from 'os'
-import { CSV_SEPARATOR, DATA_FILENAME, DATE_FORMAT } from './constants'
-import { Data, DateFormatted, HoursAndMinutes, IsCharging, Log } from './types'
+import shell from 'shelljs'
+import { BATTERY_LEVEL_CMD, CSV_SEPARATOR, DATA_FILENAME, DATE_FORMAT } from './constants'
+import { BatteryLevel, Data, DateFormatted, HoursAndMinutes, IsCharging, Log } from './types'
 import {
   durationBetween,
   durationToHoursAndMinutes,
@@ -35,7 +36,7 @@ const processRawData = (): Data[] => {
   return convertCleanedRawData(cleanedRawData)
 }
 
-const calculateLastTimesOnBattery = (data: Data[], last: number): Log[] => {
+const calculateLastTimesOnBattery = (data: Data[], quantity: number): Log[] => {
   const periods: Log[] = []
   let lastChargingDate: DateFormatted | null = null
   let lastChargingIndex: number | null = null // to excluding neighbors numbers
@@ -61,7 +62,7 @@ const calculateLastTimesOnBattery = (data: Data[], last: number): Log[] => {
     }
   })
 
-  const slicedToLastN = periods.slice(Math.max(periods.length - last, 0))
+  const slicedToLastN = periods.slice(Math.max(periods.length - quantity, 0))
 
   return slicedToLastN
 }
@@ -98,13 +99,29 @@ const calculateTimeElapsedFromLastCharging = (data: Data[]): HoursAndMinutes => 
   return durationToHoursAndMinutes(elapsedDuration)
 }
 
-const printLogs = (logs: Log[], timeElapsedFromLastCharging: HoursAndMinutes, last: number) => {
+const getBatteryLevel = (): BatteryLevel =>
+  parseInt(shell.exec(BATTERY_LEVEL_CMD, { silent: true }).toString().replace(/\n/g, ''))
+
+const print = ({
+  timeElapsedFromLastCharging,
+  batteryLevel,
+  logs,
+  quantity,
+}: {
+  timeElapsedFromLastCharging: HoursAndMinutes
+  batteryLevel: BatteryLevel
+  logs: Log[]
+  quantity: number
+}) => {
   if (timeElapsedFromLastCharging) {
     console.log(`${chalk.cyan('Time elapsed from last charging')}`)
     console.log(`${chalk.green(timeElapsedFromLastCharging)}`)
   }
 
-  console.log(`\n${chalk.cyan(`Last ${last} logs`)}`)
+  console.log(`\n${chalk.cyan('Battery level')}`)
+  console.log(`${chalk.green(`${batteryLevel}%`)}`)
+
+  console.log(`\n${chalk.cyan(`Last ${quantity} logs`)}`)
   if (logs) {
     logs.forEach((l: Log, i: number) => {
       const [dateFrom, dateTo, timeOnBattery] = l
@@ -116,14 +133,15 @@ const printLogs = (logs: Log[], timeElapsedFromLastCharging: HoursAndMinutes, la
   }
 }
 
-export const generateLogs = (last: number): void => {
+export const generateLogs = (quantity: number): void => {
   fs.stat(DATA_FILENAME, err => {
     if (err == null) {
       const data = processRawData()
-      const logs = calculateLastTimesOnBattery(data, last)
+      const logs = calculateLastTimesOnBattery(data, quantity)
       const timeElapsedFromLastCharging = calculateTimeElapsedFromLastCharging(data)
+      const batteryLevel = getBatteryLevel()
 
-      printLogs(logs, timeElapsedFromLastCharging, last)
+      print({ timeElapsedFromLastCharging, batteryLevel, logs, quantity })
     } else if (err.code === 'ENOENT') {
       console.log('Error. Log file not found or empty.\nRun service with argument "run".')
     }

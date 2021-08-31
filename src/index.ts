@@ -11,9 +11,8 @@ console.log(chalk.cyan(figlet.textSync(APP_NAME)))
 console.log(chalk.gray(DESCRIPTION))
 
 const cli = new Command()
-cli.description(DESCRIPTION).version('1.0.0', '-v, --version', 'output the current version')
+cli.description(DESCRIPTION).version('1.2.0', '-v, --version', 'output the current version')
 
-// l -q 2 OR log -q 2
 cli
   .command('log', { isDefault: true })
   .alias('l')

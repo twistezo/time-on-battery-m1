@@ -1,6 +1,6 @@
 # time-on-battery-m1
 
-Mac OS app for measure real elapsed time on battery between charging.
+Mac OS terminal app for measure real elapsed time on battery between charging.
 Without sleeping time unlike in system's Activity Monitor.
 
 ## Requirements
@@ -75,4 +75,4 @@ Options:
 
 ## Screenshot
 
- <img src="https://i.imgur.com/Bd8rcux.png">
+ <img src="https://i.imgur.com/Hmy91dh.png">
