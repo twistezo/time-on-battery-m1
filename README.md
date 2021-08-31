@@ -75,4 +75,4 @@ Options:
 
 ## Screenshot
 
- <img src="https://i.imgur.com/EYXAHnl.png">
+ <img src="https://i.imgur.com/Bd8rcux.png">

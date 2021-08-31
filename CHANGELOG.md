@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1
+
+- Update screenshot in readme
+
 ## 1.1.0
 
 - Added to logs info about elapsed time since last charging
