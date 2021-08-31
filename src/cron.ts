@@ -20,8 +20,14 @@ const getIsCharging = (): IsCharging =>
     ? 1
     : 0
 
-const getDisplayBrightness = (): Brightness =>
-  parseFloat(shell.exec(DISPLAY_BRIGHTNESS_CMD, { silent: true }).toString())
+const getDisplayBrightness = (): Brightness => {
+  const brightness: string = shell.exec(DISPLAY_BRIGHTNESS_CMD, { silent: true }).toString()
+  if (!brightness) {
+    return 0
+  } else {
+    return parseFloat(brightness)
+  }
+}
 
 const writeDataToFile = (data: Data, filename: string) => {
   const writeStream = fs.createWriteStream(filename, { flags: 'a' })
@@ -41,4 +47,4 @@ const cronFn = () => {
   writeDataToFile(data, DATA_FILENAME)
 }
 
-export const cronJob = new CronJob('1 * * * * *', cronFn, null, false)
+export const cronJob = new CronJob('* * * * * *', cronFn, null, false)
