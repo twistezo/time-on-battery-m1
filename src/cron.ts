@@ -47,4 +47,4 @@ const cronFn = () => {
   writeDataToFile(data, DATA_FILENAME)
 }
 
-export const cronJob = new CronJob('* * * * * *', cronFn, null, false)
+export const cronJob = new CronJob('1 * * * * *', cronFn, null, false)
