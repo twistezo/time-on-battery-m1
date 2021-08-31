@@ -19,11 +19,7 @@ cli
   .alias('l')
   .option('-q, --quantity <number>', 'show n last logs', '10')
   .description('show last 10 logs')
-  .action(options => {
-    const { quantity } = options
-    console.log(chalk.cyan(`Last ${quantity} logs`))
-    generateLogs(quantity)
-  })
+  .action(options => void generateLogs(options.quantity))
 
 cli
   .command('run')

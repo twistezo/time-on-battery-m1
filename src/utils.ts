@@ -6,14 +6,17 @@ export const parseFormattedDate = (date: string, format: string): string =>
 
 export const formatDate = (date: Moment, format: string): string => moment(date).format(format)
 
+export const durationBetween = (endDate: string, startDate: string, format: string): number =>
+  moment(endDate, format).diff(moment(startDate, format))
+
 export const hoursAndMinutesBetween = (
   endDate: string,
   startDate: string,
   format: string
-): string => durationToHoursAndMinutes(moment(endDate, format).diff(moment(startDate, format)))
+): HoursAndMinutes => durationToHoursAndMinutes(durationBetween(endDate, startDate, format))
 
 // https://stackoverflow.com/a/58826445/7268884
-const durationToHoursAndMinutes = (duration: number): HoursAndMinutes => {
+export const durationToHoursAndMinutes = (duration: number): HoursAndMinutes => {
   const portions: string[] = []
 
   const msInHour = 1000 * 60 * 60
