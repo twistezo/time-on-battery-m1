@@ -56,9 +56,7 @@ const calculatePeriodsOnBattery = (data: Data[], quantity: number): Log[] => {
         periodEnd = dateNext
       }
     } else if (!isChargingCurrent && isChargingNext && !isLidClosedCurrent) {
-      if (!periodStart) {
-        periodStart = dateCurrent
-      } else if (periodStart && !periodEnd) {
+      if (periodStart && !periodEnd) {
         periodEnd = dateCurrent
       }
     } else if (isChargingCurrent && isChargingNext) {
@@ -160,7 +158,9 @@ export const generateLogs = (quantity: number): void => {
 
       print({ timeElapsedFromLastCharging, batteryLevel, logs, quantity })
     } else if (err.code === 'ENOENT') {
-      console.log('Error. Log file not found or empty.\nRun service with argument "run".')
+      console.log(
+        'Error. Log file not found or empty.\nFirstly run service with argument "service".'
+      )
     }
   })
 }
