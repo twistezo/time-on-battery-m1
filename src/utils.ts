@@ -15,7 +15,7 @@ export const hoursAndMinutesBetween = (
   format: string
 ): HoursAndMinutes => durationToHoursAndMinutes(durationBetween(endDate, startDate, format))
 
-// https://stackoverflow.com/a/58826445/7268884
+// Author: https://stackoverflow.com/a/58826445/7268884
 export const durationToHoursAndMinutes = (duration: number): HoursAndMinutes => {
   const portions: string[] = []
 
@@ -40,3 +40,5 @@ export const durationToHoursAndMinutes = (duration: number): HoursAndMinutes => 
 
   return portions.join(' ')
 }
+
+export const stringToBoolean = (value: string): boolean => value.toLowerCase() === 'true'

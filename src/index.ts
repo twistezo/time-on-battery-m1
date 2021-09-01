@@ -16,13 +16,13 @@ cli.description(DESCRIPTION).version('1.2.0', '-v, --version', 'output the curre
 cli
   .command('log', { isDefault: true })
   .alias('l')
-  .option('-q, --quantity <number>', 'show n last logs', '10')
-  .description('show last 10 logs')
+  .option('-q, --quantity <number>', 'show last n periods on battery', '10')
+  .description('show last periods on battery')
   .action(options => void generateLogs(options.quantity))
 
 cli
-  .command('run')
-  .alias('r')
+  .command('service')
+  .alias('s')
   .description('run service in background')
   .action(() => {
     console.log(`Service is running...`)

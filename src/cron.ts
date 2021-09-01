@@ -1,33 +1,11 @@
 import { CronJob } from 'cron'
 import moment from 'moment'
-import shell from 'shelljs'
-import {
-  DISPLAY_BRIGHTNESS_CMD,
-  IS_CHARGING_CMD,
-  DATA_FILENAME,
-  DATA_HEADERS,
-  CSV_SEPARATOR,
-  DATE_FORMAT,
-} from './constants'
+import { DATA_FILENAME, DATA_HEADERS, CSV_SEPARATOR, DATE_FORMAT } from './constants'
 import fs from 'fs'
 import os from 'os'
-import { Brightness, Data, IsCharging, IsChargingRaw } from './types'
+import { Data } from './types'
 import { formatDate } from './utils'
-
-const getIsCharging = (): IsCharging =>
-  (shell.exec(IS_CHARGING_CMD, { silent: true }).toString().replace(/\n/g, '') as IsChargingRaw) ===
-  'Yes'
-    ? 1
-    : 0
-
-const getDisplayBrightness = (): Brightness => {
-  const brightness: string = shell.exec(DISPLAY_BRIGHTNESS_CMD, { silent: true }).toString()
-  if (!brightness) {
-    return 0
-  } else {
-    return parseFloat(brightness)
-  }
-}
+import { getDisplayBrightness, getIsCharging, getIsLidClosed } from './commands'
 
 const writeDataToFile = (data: Data, filename: string) => {
   const writeStream = fs.createWriteStream(filename, { flags: 'a' })
@@ -43,7 +21,12 @@ const writeDataToFile = (data: Data, filename: string) => {
 }
 
 const cronFn = () => {
-  const data: Data = [formatDate(moment(), DATE_FORMAT), getIsCharging(), getDisplayBrightness()]
+  const data: Data = [
+    formatDate(moment(), DATE_FORMAT),
+    getIsCharging(),
+    getDisplayBrightness(),
+    getIsLidClosed(),
+  ]
   writeDataToFile(data, DATA_FILENAME)
 }
 

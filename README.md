@@ -26,7 +26,7 @@ From npm/yarn you can use globally names:
 - `time-on-battery`
 - `time-on-battery-m1`
 
-Run in terminal `tob r` and in the other tab run `tob` or `tob l -q 20` for 10 (default) or 20 last logs. You can find logs in `tob-data.csv` file which is updated every 1 minute and placed in path where you did run `tob r`.
+Run in terminal `tob s` and in the other tab run `tob` or `tob l -q 20` for 10 (default) or 20 last logs. You can find logs in `tob-data.csv` file which is updated every 1 minute and placed in path where you did run the service.
 
 ### Background service
 
@@ -36,11 +36,13 @@ Run in terminal `tob r` and in the other tab run `tob` or `tob l -q 20` for 10 (
 
 2. Start app service
 
-   `pm2 start tob -- run`
+   `pm2 start tob -- s`
 
-3. You can check current status by `pm2 list` or in `tob-data.csv` file.
+3. You can check current status with `pm2 list` or in `tob-data.csv` file.
 
-4. You can restart service `pm2 restart tob` or stop `pm2 stop tob`.
+4. You can stop the service with `pm2 stop tob`.
+
+5. After update to new version just reload the service with `pm2 reload tob`
 
 ## Commands
 
@@ -49,19 +51,20 @@ Usage: tob [options] [command]
 
 Options:
   -v, --version    output the current version
+  -h, --help       display help for command
 
 Commands:
   log|l [options]  show last 10 logs
-  run|r            run service in background
+  service|s        run service in background
 ```
 
 ```
 Usage: tob log|l [options]
 
-show last 10 logs
+show last periods on battery
 
 Options:
-  -q, --quantity <number>  show n last logs (default: "10")
+  -q, --quantity <number>  show last n periods on battery (default: "10")
 ```
 
 ## Development

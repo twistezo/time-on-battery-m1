@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0
+
+This change is not backward compatible. You should delete the log file `tob-data.csv` before starting the service.
+
+- Rewriting algorithms to simplify and improve logic
+
 ## 1.2.0
 
 - Added current battery level
