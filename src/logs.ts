@@ -7,7 +7,6 @@ import { BatteryLevel, Data, DateFormatted, HoursAndMinutes, Log } from './types
 import {
   durationBetween,
   durationToHoursAndMinutes,
-  hoursAndMinutesBetween,
   parseFormattedDate,
   stringToBoolean,
 } from './utils'
@@ -44,6 +43,7 @@ const calculatePeriodsOnBattery = (data: Data[], quantity: number): Log[] => {
   const periods: Log[] = []
   let periodStart: DateFormatted | null = null
   let periodEnd: DateFormatted | null = null
+  let sleepDuration = 0
 
   data.reduce((current, next): Data => {
     const [dateCurrent, isChargingCurrent, , isLidClosedCurrent] = current
@@ -64,12 +64,17 @@ const calculatePeriodsOnBattery = (data: Data[], quantity: number): Log[] => {
       periodEnd = null
     }
 
-    if (periodStart && periodEnd) {
-      const hoursAndMinutes: HoursAndMinutes = hoursAndMinutesBetween(
-        periodEnd,
-        periodStart,
-        DATE_FORMAT
-      )
+    if (periodStart && !periodEnd) {
+      if (isLidClosedCurrent && isLidClosedNext) {
+        sleepDuration += durationBetween(dateNext, dateCurrent, DATE_FORMAT)
+      }
+    }
+
+    if (periodStart && periodEnd && sleepDuration) {
+      const periodsDuration = durationBetween(periodEnd, periodStart, DATE_FORMAT)
+      const duration = periodsDuration - sleepDuration
+      const hoursAndMinutes = durationToHoursAndMinutes(duration)
+
       if (hoursAndMinutes) {
         periods.push([periodStart, periodEnd, hoursAndMinutes])
       }
@@ -88,7 +93,8 @@ const calculatePeriodsOnBattery = (data: Data[], quantity: number): Log[] => {
 const calculateTimeFromCharging = (data: Data[]): HoursAndMinutes => {
   let lastChargingIndex: number | null = null
   let tempData = [...data].reverse()
-  let duration = 0
+  let workDuration = 0
+  let sleepDuration = 0
 
   for (const [i, data] of tempData.entries()) {
     const [, isCharging] = data
@@ -104,16 +110,21 @@ const calculateTimeFromCharging = (data: Data[]): HoursAndMinutes => {
     tempData = tempData.reverse()
 
     tempData.reduce((curr, next): Data => {
-      const [dateCurr, , , isLidClosedCurr] = curr
+      const [dateCurrent, , , isLidCLosedCurrent] = curr
       const [dateNext, , , isLidClosedNext] = next
 
-      if (!isLidClosedCurr && !isLidClosedNext) {
-        duration += durationBetween(dateNext, dateCurr, DATE_FORMAT)
+      if (!isLidCLosedCurrent && !isLidClosedNext) {
+        workDuration += durationBetween(dateNext, dateCurrent, DATE_FORMAT)
+      }
+
+      if (isLidCLosedCurrent && isLidClosedNext) {
+        sleepDuration += durationBetween(dateNext, dateCurrent, DATE_FORMAT)
       }
       return next
     })
   }
 
+  const duration = workDuration - sleepDuration
   return durationToHoursAndMinutes(duration)
 }
 

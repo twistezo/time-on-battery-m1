@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.2
+
+- Improve calculating sleep time
+
 ## 2.0.1
 
 - Minor improvement for calculate battery periods algorithm
