@@ -62,6 +62,7 @@ const calculatePeriodsOnBattery = (data: Data[], quantity: number): Log[] => {
     } else if (isChargingCurrent && isChargingNext) {
       periodStart = null
       periodEnd = null
+      sleepDuration = 0
     }
 
     if (periodStart && !periodEnd) {
@@ -81,6 +82,7 @@ const calculatePeriodsOnBattery = (data: Data[], quantity: number): Log[] => {
 
       periodStart = null
       periodEnd = null
+      sleepDuration = 0
     }
 
     return next
@@ -109,17 +111,17 @@ const calculateTimeFromCharging = (data: Data[]): HoursAndMinutes => {
     tempData = tempData.slice(0, lastChargingIndex)
     tempData = tempData.reverse()
 
-    tempData.reduce((curr, next): Data => {
-      const [dateCurrent, , , isLidCLosedCurrent] = curr
+    tempData.reduce((current, next): Data => {
+      const [dateCurrent, , , isLidCLosedCurrent] = current
       const [dateNext, , , isLidClosedNext] = next
 
       if (!isLidCLosedCurrent && !isLidClosedNext) {
         workDuration += durationBetween(dateNext, dateCurrent, DATE_FORMAT)
       }
-
       if (isLidCLosedCurrent && isLidClosedNext) {
         sleepDuration += durationBetween(dateNext, dateCurrent, DATE_FORMAT)
       }
+
       return next
     })
   }

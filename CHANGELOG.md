@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.3
+
+- Fix reset sleeping time between charging periods
+
 ## 2.0.2
 
 - Improve calculating sleep time
