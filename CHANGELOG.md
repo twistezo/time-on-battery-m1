@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.4
+
+- Refactor app version constant
+
 ## 2.0.3
 
 - Fix reset sleeping time between charging periods
