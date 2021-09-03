@@ -5,7 +5,7 @@ import fs from 'fs'
 import os from 'os'
 import { Data } from './types'
 import { formatDate } from './utils'
-import { getDisplayBrightness, getIsCharging, getIsLidClosed } from './commands'
+import { getBatteryLevel, getDisplayBrightness, getIsCharging, getIsLidClosed } from './commands'
 
 const writeDataToFile = (data: Data, filename: string) => {
   const writeStream = fs.createWriteStream(filename, { flags: 'a' })
@@ -26,6 +26,7 @@ const cronFn = () => {
     getIsCharging(),
     getDisplayBrightness(),
     getIsLidClosed(),
+    getBatteryLevel(),
   ]
   writeDataToFile(data, DATA_FILENAME)
 }

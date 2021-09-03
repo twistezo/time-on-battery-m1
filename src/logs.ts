@@ -30,6 +30,7 @@ const convertCleanedRawData = (cleanedRawData: string[][]): Data[] =>
       stringToBoolean(e[1]),
       parseFloat(e[2]),
       stringToBoolean(e[3]),
+      parseInt(e[4]),
     ]
   )
 
@@ -44,22 +45,27 @@ const calculatePeriodsOnBattery = (data: Data[], quantity: number): Log[] => {
   let periodStart: DateFormatted | null = null
   let periodEnd: DateFormatted | null = null
   let sleepDuration = 0
+  let batteryStart: number | null = null
+  let batteryEnd: number | null = null
 
   data.reduce((current, next): Data => {
-    const [dateCurrent, isChargingCurrent, , isLidClosedCurrent] = current
-    const [dateNext, isChargingNext, , isLidClosedNext] = next
+    const [dateCurrent, isChargingCurrent, , isLidClosedCurrent, batteryCurrent] = current
+    const [dateNext, isChargingNext, , isLidClosedNext, batteryNext] = next
 
     if (isChargingCurrent && !isChargingNext) {
       // charging has stopped
       if (isLidClosedCurrent && isLidClosedNext) {
         // charging has stopped with closed lid
         periodStart = dateNext
+        batteryStart = batteryNext
       } else if (!isLidClosedNext) {
         // charging has stopped and lid has been opened
         if (!periodStart) {
           periodStart = dateNext
+          batteryStart = batteryNext
         } else if (periodStart && !periodEnd) {
           periodEnd = dateNext
+          batteryEnd = batteryNext
         }
       }
     } else if (!isChargingCurrent && isChargingNext) {
@@ -68,16 +74,20 @@ const calculatePeriodsOnBattery = (data: Data[], quantity: number): Log[] => {
         // charging has started with opened lid
         if (periodStart && !periodEnd) {
           periodEnd = dateCurrent
+          batteryEnd = batteryCurrent
         }
       } else if (isLidClosedNext) {
         // charging has started with closed lid
         periodEnd = dateNext
+        batteryEnd = batteryNext
       }
     } else if (isChargingCurrent && isChargingNext) {
       // charging is in progress
       periodStart = null
       periodEnd = null
       sleepDuration = 0
+      batteryStart = null
+      batteryEnd = null
     }
 
     if (periodStart && !periodEnd) {
@@ -86,13 +96,13 @@ const calculatePeriodsOnBattery = (data: Data[], quantity: number): Log[] => {
       }
     }
 
-    if (periodStart && periodEnd) {
+    if (periodStart && periodEnd && batteryStart && batteryEnd) {
       const periodsDuration = durationBetween(periodEnd, periodStart, DATE_FORMAT)
       const duration = periodsDuration - sleepDuration
       const hoursAndMinutes = durationToHoursAndMinutes(duration)
 
       if (hoursAndMinutes) {
-        periods.push([periodStart, periodEnd, hoursAndMinutes])
+        periods.push([periodStart, periodEnd, hoursAndMinutes, batteryStart, batteryEnd])
       }
 
       periodStart = null
@@ -107,10 +117,16 @@ const calculatePeriodsOnBattery = (data: Data[], quantity: number): Log[] => {
   return slicedToLastN
 }
 
-const calculateTimeFromCharging = (data: Data[]): HoursAndMinutes => {
+const calculateTimeFromCharging = (
+  data: Data[]
+): {
+  time: HoursAndMinutes
+  battery: BatteryLevel | null
+} => {
   let lastChargingIndex: number | null = null
   let tempData = [...data].reverse()
   let duration = 0
+  let batteryLevel: BatteryLevel | null = null
 
   for (const [i, data] of tempData.entries()) {
     const [, isCharging] = data
@@ -122,6 +138,8 @@ const calculateTimeFromCharging = (data: Data[]): HoursAndMinutes => {
   }
 
   if (lastChargingIndex) {
+    batteryLevel = tempData[lastChargingIndex][4]
+
     tempData = tempData.slice(0, lastChargingIndex)
     tempData = tempData.reverse()
 
@@ -137,33 +155,47 @@ const calculateTimeFromCharging = (data: Data[]): HoursAndMinutes => {
     })
   }
 
-  return durationToHoursAndMinutes(duration)
+  return {
+    time: durationToHoursAndMinutes(duration),
+    battery: batteryLevel,
+  }
 }
 
 const print = ({
   timeElapsedFromLastCharging,
-  batteryLevel,
+  lastChargingBatteryLevel,
+  currentBatteryLevel,
   logs,
   quantity,
 }: {
   timeElapsedFromLastCharging: HoursAndMinutes
-  batteryLevel: BatteryLevel
+  lastChargingBatteryLevel: BatteryLevel | null
+  currentBatteryLevel: BatteryLevel
   logs: Log[]
   quantity: number
 }) => {
   if (timeElapsedFromLastCharging) {
-    console.log(`${chalk.cyan('Time elapsed from last charging')}`)
+    console.log(
+      `${chalk.cyan('Time elapsed from last charging')}${
+        lastChargingBatteryLevel ? chalk.cyan(' to ' + lastChargingBatteryLevel + '%') : ''
+      }`
+    )
     console.log(`${chalk.green(timeElapsedFromLastCharging)}\n`)
   }
 
-  console.log(`${chalk.cyan('Battery level')}`)
-  console.log(`${chalk.green(`${batteryLevel}%`)}`)
+  console.log(`${chalk.cyan('Current battery level')}`)
+  console.log(`${chalk.green(`${currentBatteryLevel}%`)}`)
 
   console.log(`\n${chalk.cyan(`Last ${quantity} periods on battery`)}`)
   if (logs) {
     logs.forEach((l: Log, i: number) => {
-      const [dateFrom, dateTo, timeOnBattery] = l
-      console.log(`${chalk.cyan(i + 1)}. ${dateFrom} - ${dateTo} -> ${chalk.green(timeOnBattery)}`)
+      const [dateFrom, dateTo, timeOnBattery, batteryStart, batteryEnd] = l
+
+      console.log(
+        `${chalk.cyan(i + 1)}. ${dateFrom} ${chalk.green(
+          batteryStart + '%'
+        )} - ${dateTo} ${chalk.yellow(batteryEnd + '%')} -> ${chalk.green(timeOnBattery)}`
+      )
     })
   } else {
     console.log('Not enough data for calculations...')
@@ -176,14 +208,19 @@ export const generateLogs = (quantity: number): void => {
     if (err == null) {
       const data = processRawData()
       const logs = calculatePeriodsOnBattery(data, quantity)
-      const timeElapsedFromLastCharging = calculateTimeFromCharging(data)
-      const batteryLevel = getBatteryLevel()
+      const { time: timeElapsedFromLastCharging, battery: lastChargingBatteryLevel } =
+        calculateTimeFromCharging(data)
+      const currentBatteryLevel = getBatteryLevel()
 
-      print({ timeElapsedFromLastCharging, batteryLevel, logs, quantity })
+      print({
+        timeElapsedFromLastCharging,
+        lastChargingBatteryLevel,
+        currentBatteryLevel,
+        logs,
+        quantity,
+      })
     } else if (err.code === 'ENOENT') {
-      console.log(
-        'Error. Log file not found or empty.\nFirstly run service with argument "service".'
-      )
+      console.log('Error. Log file not found or empty.\nFirstly run service.')
     }
   })
 }

@@ -88,4 +88,4 @@ Options:
 
 ## Screenshot
 
- <img src="https://i.imgur.com/Hmy91dh.png">
+ <img src="https://imgur.com/DOIdGRy.png">

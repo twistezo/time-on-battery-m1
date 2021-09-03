@@ -1,31 +1,31 @@
-Date,Is charging?,Brightness,Is lid closed?
-31.08.2021 10:00,false,0.1,false
-  31.08.2021 10:01,true,0.1,false
-31.08.2021 10:02,false,0.1,false
-31.08.2021 10:03,false,0.1,false
-31.08.2021 10:04,false,0.1,true
-31.08.2021 10:05,false,0.1,true
-31.08.2021 10:06,false,0.1,false
-31.08.2021 10:07,false,0.1,false
-  31.08.2021 10:08,true,0.1,false
-  31.08.2021 10:09,true,0.1,false
-31.08.2021 10:10,false,0.1,false
-31.08.2021 10:11,false,0.1,false
-31.08.2021 10:12,false,0.1,true
-31.08.2021 10:13,false,0.1,true
-31.08.2021 10:14,false,0.1,false
-31.08.2021 10:15,false,0.1,false
-  31.08.2021 10:16,true,0.1,true
-  31.08.2021 10:17,true,0.1,true
-31.08.2021 10:18,false,0.1,true
-31.08.2021 10:19,false,0.1,false
-31.08.2021 10:20,false,0.1,false
-31.08.2021 10:21,false,0.1,false
-31.08.2021 10:22,false,0.1,true
-  31.08.2021 10:23,true,0.1,true
-31.08.2021 10:24,false,0.1,false
-31.08.2021 10:25,false,0.1,false
-31.08.2021 10:26,false,0.1,true
-31.08.2021 10:27,false,0.1,true
-31.08.2021 10:28,false,0.1,false
-31.08.2021 10:29,false,0.1,false
+Date,Is charging?,Brightness,Is lid closed?,Battery
+31.08.2021 10:00,false,0.1,false,50
+  31.08.2021 10:01,true,0.1,false,90
+31.08.2021 10:02,false,0.1,false,80
+31.08.2021 10:03,false,0.1,false,70
+31.08.2021 10:04,false,0.1,true,60
+31.08.2021 10:05,false,0.1,true,50
+31.08.2021 10:06,false,0.1,false,40
+31.08.2021 10:07,false,0.1,false,30
+  31.08.2021 10:08,true,0.1,false,70
+  31.08.2021 10:09,true,0.1,false,80
+31.08.2021 10:10,false,0.1,false,70
+31.08.2021 10:11,false,0.1,false,60
+31.08.2021 10:12,false,0.1,true,50
+31.08.2021 10:13,false,0.1,true,40
+31.08.2021 10:14,false,0.1,false,30
+31.08.2021 10:15,false,0.1,false,20
+  31.08.2021 10:16,true,0.1,true,50
+  31.08.2021 10:17,true,0.1,true,70
+31.08.2021 10:18,false,0.1,true,60
+31.08.2021 10:19,false,0.1,false,50
+31.08.2021 10:20,false,0.1,false,40
+31.08.2021 10:21,false,0.1,false,30
+31.08.2021 10:22,false,0.1,true,20
+  31.08.2021 10:23,true,0.1,true,20
+31.08.2021 10:24,false,0.1,false,80
+31.08.2021 10:25,false,0.1,false,70
+31.08.2021 10:26,false,0.1,true,60
+31.08.2021 10:27,false,0.1,true,50
+31.08.2021 10:28,false,0.1,false,40
+31.08.2021 10:29,false,0.1,false,30

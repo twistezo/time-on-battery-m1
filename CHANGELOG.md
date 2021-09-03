@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.0.0
+
+This change is not backward compatible. You should delete the log file `tob-data.csv` before starting the service.
+
+- The service collects battery percentage
+- "Time elapsed from last charging" shows battery percentage
+- "Last periods on battery" show battery percentage from and to
+
 ## 2.0.1 - 2.0.7
 
 Minor improvement and fixes for calculate battery periods algorithm

@@ -1,5 +1,5 @@
 export const APP_NAME = 'time-on-battery-m1'
-export const VERSION = '2.0.7'
+export const VERSION = '3.0.0'
 export const DESCRIPTION = `Mac OS terminal app for measure real elapsed time on battery between charging.
 Without sleeping time unlike in system's Activity Monitor.
 v${VERSION}
@@ -10,5 +10,5 @@ export const BATTERY_LEVEL_CMD = `ioreg -l -w0 | grep '"CurrentCapacity" =' | gr
 export const IS_LID_CLOSED = `ioreg -r -k AppleClamshellState -d 1 | grep AppleClamshellState | awk '{print $3}'`
 export const DATE_FORMAT = 'DD.MM.YYYY HH:mm'
 export const DATA_FILENAME = 'tob-data.csv'
-export const DATA_HEADERS = ['Date', 'Is charging?', 'Brightness', 'Is lid closed?']
+export const DATA_HEADERS = ['Date', 'Is charging?', 'Brightness', 'Is lid closed?', 'Battery']
 export const CSV_SEPARATOR = ','
