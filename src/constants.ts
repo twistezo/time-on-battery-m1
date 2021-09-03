@@ -2,7 +2,7 @@ export const APP_NAME = 'time-on-battery-m1'
 export const VERSION = '2.0.5'
 export const DESCRIPTION = `Mac OS terminal app for measure real elapsed time on battery between charging.
 Without sleeping time unlike in system's Activity Monitor.
-v2.0.4
+v${VERSION}
 `
 export const IS_CHARGING_CMD = `system_profiler SPPowerDataType | grep Connected | awk '{print $2}'`
 export const DISPLAY_BRIGHTNESS_CMD = `/usr/libexec/corebrightnessdiag status-info | grep 'DisplayServicesBrightness ' | grep -Eo "\\d+(?:\\.\\d+)?"`

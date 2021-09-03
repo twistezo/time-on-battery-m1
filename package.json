@@ -5,7 +5,7 @@
     "time-on-battery": "build/index.js",
     "time-on-battery-m1": "build/index.js"
   },
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "Mac OS app for measure real elapsed time on battery between charging. Without sleeping time unlike in system's Activity Monitor. Requires Big Sur and M1 processor.",
   "homepage": "https://github.com/twistezo/time-on-battery-m1",
   "author": "twistezo",
