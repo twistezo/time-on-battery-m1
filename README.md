@@ -2,11 +2,11 @@
 
 # time-on-battery-m1
 
-![](https://img.shields.io/npm/l/@twistezo/time-on-battery-m1?style=flat-square&color=9cf)
-![](https://img.shields.io/npm/v/@twistezo/time-on-battery-m1?style=flat-square&color=blue)
-![](https://img.shields.io/npm/dw/@twistezo/time-on-battery-m1?style=flat-square&color=blueviolet)
-![](https://img.shields.io/badge/platform-macOS-lightgray?style=flat-square&color=brightgreen)
+![](https://img.shields.io/npm/v/@twistezo/time-on-battery-m1?style=flat-square&color=9cf)
+![](https://img.shields.io/npm/dw/@twistezo/time-on-battery-m1?style=flat-square&color=9cf)
+![](https://img.shields.io/badge/platform-macOS-lightgray?style=flat-square&color=green)
 ![](https://img.shields.io/badge/arch-arm64-9cf?style=flat-square&color=green)
+![](https://img.shields.io/npm/l/@twistezo/time-on-battery-m1?style=flat-square&color=inactive)
 
 </div>
 
