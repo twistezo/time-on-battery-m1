@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.5
+
+- Fix sleep time calculations in "time elapsed form last charging"
+
 ## 2.0.4
 
 - Refactor app version constant

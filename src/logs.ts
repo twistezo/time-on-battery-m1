@@ -95,8 +95,7 @@ const calculatePeriodsOnBattery = (data: Data[], quantity: number): Log[] => {
 const calculateTimeFromCharging = (data: Data[]): HoursAndMinutes => {
   let lastChargingIndex: number | null = null
   let tempData = [...data].reverse()
-  let workDuration = 0
-  let sleepDuration = 0
+  let duration = 0
 
   for (const [i, data] of tempData.entries()) {
     const [, isCharging] = data
@@ -116,17 +115,13 @@ const calculateTimeFromCharging = (data: Data[]): HoursAndMinutes => {
       const [dateNext, , , isLidClosedNext] = next
 
       if (!isLidCLosedCurrent && !isLidClosedNext) {
-        workDuration += durationBetween(dateNext, dateCurrent, DATE_FORMAT)
-      }
-      if (isLidCLosedCurrent && isLidClosedNext) {
-        sleepDuration += durationBetween(dateNext, dateCurrent, DATE_FORMAT)
+        duration += durationBetween(dateNext, dateCurrent, DATE_FORMAT)
       }
 
       return next
     })
   }
 
-  const duration = workDuration - sleepDuration
   return durationToHoursAndMinutes(duration)
 }
 
