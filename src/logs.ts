@@ -49,17 +49,32 @@ const calculatePeriodsOnBattery = (data: Data[], quantity: number): Log[] => {
     const [dateCurrent, isChargingCurrent, , isLidClosedCurrent] = current
     const [dateNext, isChargingNext, , isLidClosedNext] = next
 
-    if (isChargingCurrent && !isChargingNext && !isLidClosedNext) {
-      if (!periodStart) {
+    if (isChargingCurrent && !isChargingNext) {
+      // charging has stopped
+      if (isLidClosedCurrent && isLidClosedNext) {
+        // charging has stopped with closed lid
         periodStart = dateNext
-      } else if (periodStart && !periodEnd) {
+      } else if (!isLidClosedNext) {
+        // charging has stopped and lid has been opened
+        if (!periodStart) {
+          periodStart = dateNext
+        } else if (periodStart && !periodEnd) {
+          periodEnd = dateNext
+        }
+      }
+    } else if (!isChargingCurrent && isChargingNext) {
+      // charging has started
+      if (!isLidClosedCurrent) {
+        // charging has started with opened lid
+        if (periodStart && !periodEnd) {
+          periodEnd = dateCurrent
+        }
+      } else if (isLidClosedNext) {
+        // charging has started with closed lid
         periodEnd = dateNext
       }
-    } else if (!isChargingCurrent && isChargingNext && !isLidClosedCurrent) {
-      if (periodStart && !periodEnd) {
-        periodEnd = dateCurrent
-      }
     } else if (isChargingCurrent && isChargingNext) {
+      // charging is in progress
       periodStart = null
       periodEnd = null
       sleepDuration = 0
@@ -71,7 +86,7 @@ const calculatePeriodsOnBattery = (data: Data[], quantity: number): Log[] => {
       }
     }
 
-    if (periodStart && periodEnd && sleepDuration) {
+    if (periodStart && periodEnd) {
       const periodsDuration = durationBetween(periodEnd, periodStart, DATE_FORMAT)
       const duration = periodsDuration - sleepDuration
       const hoursAndMinutes = durationToHoursAndMinutes(duration)

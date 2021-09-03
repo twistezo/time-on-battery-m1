@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0.1 - 2.0.6
+## 2.0.1 - 2.0.7
 
 Minor improvement and fixes for calculate battery periods algorithm
 
