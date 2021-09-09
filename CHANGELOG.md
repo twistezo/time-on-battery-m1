@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.1.0
+
+Added info about ongoing charging.
+Fixed case when charging has stopped and lid was suddenly opened
+
 ## 3.0.0
 
 This change is not backward compatible. You should delete the log file `tob-data.csv` before starting the service.

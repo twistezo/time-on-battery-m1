@@ -1,5 +1,5 @@
 export const APP_NAME = 'time-on-battery-m1'
-export const VERSION = '3.0.0'
+export const VERSION = '3.1.0'
 export const DESCRIPTION = `Mac OS terminal app for measure real elapsed time on battery between charging.
 Without sleeping time unlike in system's Activity Monitor.
 v${VERSION}

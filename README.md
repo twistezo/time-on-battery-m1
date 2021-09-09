@@ -88,4 +88,10 @@ Options:
 
 ## Screenshot
 
- <img src="https://imgur.com/DOIdGRy.png">
+### A few hours after charging
+
+<img src="https://imgur.com/8u5XDQW.png">
+
+### While charging
+
+<img src="https://imgur.com/QcnTpqd.png">

@@ -1,5 +1,12 @@
 Date,Is charging?,Brightness,Is lid closed?,Battery
-31.08.2021 10:00,false,0.1,false,50
+31.08.2021 09:53,false,0.1,true,60
+  31.08.2021 09:54,true,0.1,false,70
+31.08.2021 09:55,false,0.1,false,60
+31.08.2021 09:56,false,0.1,false,50
+31.08.2021 09:57,false,0.1,true,40
+31.08.2021 09:58,false,0.1,true,30
+31.08.2021 09:59,false,0.1,false,20
+31.08.2021 10:00,false,0.1,false,10
   31.08.2021 10:01,true,0.1,false,90
 31.08.2021 10:02,false,0.1,false,80
 31.08.2021 10:03,false,0.1,false,70

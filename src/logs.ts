@@ -58,7 +58,7 @@ const calculatePeriodsOnBattery = (data: Data[], quantity: number): Log[] => {
         // charging has stopped with closed lid
         periodStart = dateNext
         batteryStart = batteryNext
-      } else if (!isLidClosedNext) {
+      } else if (!isLidClosedNext || !isLidClosedCurrent) {
         // charging has stopped and lid has been opened
         if (!periodStart) {
           periodStart = dateNext
@@ -129,9 +129,9 @@ const calculateTimeFromCharging = (
   let batteryLevel: BatteryLevel | null = null
 
   for (const [i, data] of tempData.entries()) {
-    const [, isCharging] = data
+    const [, isChargingData] = data
 
-    if (isCharging) {
+    if (isChargingData) {
       lastChargingIndex = i
       break
     }
@@ -161,15 +161,22 @@ const calculateTimeFromCharging = (
   }
 }
 
+const notEnoughDataInfo = (): void => {
+  console.log('Not enough data for calculations...')
+  console.log('Check if the service is running or wait a while for collecting the data.')
+}
+
 const print = ({
   timeElapsedFromLastCharging,
   lastChargingBatteryLevel,
+  isCharging,
   currentBatteryLevel,
   logs,
   quantity,
 }: {
   timeElapsedFromLastCharging: HoursAndMinutes
   lastChargingBatteryLevel: BatteryLevel | null
+  isCharging: boolean
   currentBatteryLevel: BatteryLevel
   logs: Log[]
   quantity: number
@@ -183,8 +190,12 @@ const print = ({
     console.log(`${chalk.green(timeElapsedFromLastCharging)}\n`)
   }
 
-  console.log(`${chalk.cyan('Current battery level')}`)
-  console.log(`${chalk.green(`${currentBatteryLevel}%`)}`)
+  console.log(`${chalk.cyan('Battery level')}`)
+  console.log(
+    `${chalk.green(`${isCharging ? '⚡ ' : ''}${currentBatteryLevel}%`)}${
+      isCharging ? chalk.green(' - charging...') : ''
+    }`
+  )
 
   console.log(`\n${chalk.cyan(`Last ${quantity} periods on battery`)}`)
   if (logs) {
@@ -198,8 +209,7 @@ const print = ({
       )
     })
   } else {
-    console.log('Not enough data for calculations...')
-    console.log('Check if the service is running or wait a while for collecting the data.')
+    notEnoughDataInfo()
   }
 }
 
@@ -207,14 +217,21 @@ export const generateLogs = (quantity: number): void => {
   fs.stat(DATA_FILENAME, err => {
     if (err == null) {
       const data = processRawData()
-      const logs = calculatePeriodsOnBattery(data, quantity)
+      if (data.length === 0) {
+        notEnoughDataInfo()
+        return
+      }
+
+      const logs = calculatePeriodsOnBattery(data, quantity).reverse()
       const { time: timeElapsedFromLastCharging, battery: lastChargingBatteryLevel } =
         calculateTimeFromCharging(data)
       const currentBatteryLevel = getBatteryLevel()
+      const isCharging = data[data.length - 1][1]
 
       print({
         timeElapsedFromLastCharging,
         lastChargingBatteryLevel,
+        isCharging,
         currentBatteryLevel,
         logs,
         quantity,
