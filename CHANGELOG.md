@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.2.0
+
+- Added tabulators to logs for better readability
+
 ## 3.1.0
 
 - Added info about ongoing charging.

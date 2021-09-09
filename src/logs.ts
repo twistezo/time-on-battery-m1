@@ -203,9 +203,9 @@ const print = ({
       const [dateFrom, dateTo, timeOnBattery, batteryStart, batteryEnd] = l
 
       console.log(
-        `${chalk.cyan(i + 1)}. ${dateFrom} ${chalk.green(
+        `${chalk.cyan(i + 1)} ${dateFrom} ${chalk.green(
           batteryStart + '%'
-        )} - ${dateTo} ${chalk.yellow(batteryEnd + '%')} -> ${chalk.green(timeOnBattery)}`
+        )}\t- ${dateTo} ${chalk.yellow(batteryEnd + '%')}\t-> ${chalk.cyan(timeOnBattery)}`
       )
     })
   } else {
