@@ -2,8 +2,9 @@
 
 ## 3.1.0
 
-Added info about ongoing charging.
-Fixed case when charging has stopped and lid was suddenly opened
+- Added info about ongoing charging.
+- Last logs have been reversed.
+- Fixed case when charging has stopped and lid was suddenly opened
 
 ## 3.0.0
 
