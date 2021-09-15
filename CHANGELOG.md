@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.3.0
+
+- Table view
+
 ## 3.2.0
 
 - Added tabulators to logs for better readability

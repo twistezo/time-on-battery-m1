@@ -10,6 +10,7 @@ import {
   parseFormattedDate,
   stringToBoolean,
 } from './utils'
+import { getBorderCharacters, table, TableUserConfig } from 'table'
 
 const readRawData = (): string => fs.readFileSync(DATA_FILENAME).toString()
 
@@ -90,10 +91,8 @@ const calculatePeriodsOnBattery = (data: Data[], quantity: number): Log[] => {
       batteryEnd = null
     }
 
-    if (periodStart && !periodEnd) {
-      if (isLidClosedCurrent && isLidClosedNext) {
-        sleepDuration += durationBetween(dateNext, dateCurrent, DATE_FORMAT)
-      }
+    if (isLidClosedCurrent && isLidClosedNext) {
+      sleepDuration += durationBetween(dateNext, dateCurrent, DATE_FORMAT)
     }
 
     if (periodStart && periodEnd && batteryStart && batteryEnd) {
@@ -199,15 +198,26 @@ const print = ({
 
   console.log(`\n${chalk.cyan(`Last ${quantity} periods on battery`)}`)
   if (logs) {
-    logs.forEach((l: Log, i: number) => {
+    const data = logs.map((l: Log, i: number) => {
       const [dateFrom, dateTo, timeOnBattery, batteryStart, batteryEnd] = l
 
-      console.log(
-        `${chalk.cyan(i + 1)} ${dateFrom} ${chalk.green(
-          batteryStart + '%'
-        )}\t- ${dateTo} ${chalk.yellow(batteryEnd + '%')}\t-> ${chalk.cyan(timeOnBattery)}`
-      )
+      const index = chalk.cyan(i + 1)
+      const batteryFrom = chalk.green(batteryStart + '%')
+      const batteryTo = chalk.yellow(batteryEnd + '%')
+      const tob = chalk.blue(timeOnBattery)
+
+      return [index, dateFrom, batteryFrom, dateTo, batteryTo, tob]
     })
+
+    const headers = ['', chalk.cyan('From'), '%', 'To', '%', 'Time']
+    data.unshift(headers.map(h => chalk.cyan(h)))
+
+    const config: TableUserConfig = {
+      border: getBorderCharacters('ramac'),
+      drawHorizontalLine: (lineIndex, rowCount) =>
+        lineIndex === 0 || lineIndex === 1 || lineIndex === rowCount,
+    }
+    console.log(table(data, config))
   } else {
     notEnoughDataInfo()
   }
