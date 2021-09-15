@@ -23,10 +23,11 @@ cli
 cli
   .command('service')
   .alias('s')
+  .option('-i, --interval <number>', 'service interval in seconds\nmin. 10s - max. 60s', '60')
   .description('run service in background')
-  .action(() => {
+  .action(options => {
     console.log(`Service is running...`)
-    cronJob.start()
+    cronJob(options.interval).start()
   })
 
 cli.parse(process.argv)
