@@ -9,6 +9,8 @@ export const DISPLAY_BRIGHTNESS_CMD = `/usr/libexec/corebrightnessdiag status-in
 export const BATTERY_LEVEL_CMD = `ioreg -l -w0 | grep '"CurrentCapacity" =' | grep -Eo "\\d+(?:\\.\\d+)?"`
 export const IS_LID_CLOSED = `ioreg -r -k AppleClamshellState -d 1 | grep AppleClamshellState | awk '{print $3}'`
 export const DATE_FORMAT = 'DD.MM.YYYY HH:mm'
+export const DATE_FORMAT_WITH_SECONDS = 'DD.MM.YYYY HH:mm:ss'
 export const DATA_FILENAME = 'tob-data.csv'
 export const DATA_HEADERS = ['Date', 'Is charging?', 'Brightness', 'Is lid closed?', 'Battery']
 export const CSV_SEPARATOR = ','
+export const INTERVAL = { MIN: 10, MAX: 60 }

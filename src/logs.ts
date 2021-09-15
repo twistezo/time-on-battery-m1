@@ -2,7 +2,7 @@ import chalk from 'chalk'
 import fs from 'fs'
 import os from 'os'
 import { getBatteryLevel } from './commands'
-import { CSV_SEPARATOR, DATA_FILENAME, DATE_FORMAT } from './constants'
+import { CSV_SEPARATOR, DATA_FILENAME, DATE_FORMAT, DATE_FORMAT_WITH_SECONDS } from './constants'
 import { BatteryLevel, Data, DateFormatted, HoursAndMinutes, Log } from './types'
 import {
   durationBetween,
@@ -26,7 +26,7 @@ const cleanRawData = (rawData: string): string[][] => {
 const convertCleanedRawData = (cleanedRawData: string[][]): Data[] =>
   cleanedRawData.map(
     (e): Data => [
-      parseFormattedDate(e[0], DATE_FORMAT),
+      parseFormattedDate(e[0], DATE_FORMAT_WITH_SECONDS),
       stringToBoolean(e[1]),
       parseFloat(e[2]),
       stringToBoolean(e[3]),
@@ -90,14 +90,12 @@ const calculatePeriodsOnBattery = (data: Data[], quantity: number): Log[] => {
       batteryEnd = null
     }
 
-    if (periodStart && !periodEnd) {
-      if (isLidClosedCurrent && isLidClosedNext) {
-        sleepDuration += durationBetween(dateNext, dateCurrent, DATE_FORMAT)
-      }
+    if (isLidClosedCurrent && isLidClosedNext) {
+      sleepDuration += durationBetween(dateNext, dateCurrent, DATE_FORMAT_WITH_SECONDS)
     }
 
     if (periodStart && periodEnd && batteryStart && batteryEnd) {
-      const periodsDuration = durationBetween(periodEnd, periodStart, DATE_FORMAT)
+      const periodsDuration = durationBetween(periodEnd, periodStart, DATE_FORMAT_WITH_SECONDS)
       const duration = periodsDuration - sleepDuration
       const hoursAndMinutes = durationToHoursAndMinutes(duration)
 
@@ -148,7 +146,7 @@ const calculateTimeFromCharging = (
       const [dateNext, , , isLidClosedNext] = next
 
       if (!isLidCLosedCurrent && !isLidClosedNext) {
-        duration += durationBetween(dateNext, dateCurrent, DATE_FORMAT)
+        duration += durationBetween(dateNext, dateCurrent, DATE_FORMAT_WITH_SECONDS)
       }
 
       return next

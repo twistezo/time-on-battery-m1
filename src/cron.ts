@@ -1,10 +1,16 @@
 import { CronJob } from 'cron'
 import moment from 'moment'
-import { DATA_FILENAME, DATA_HEADERS, CSV_SEPARATOR, DATE_FORMAT } from './constants'
+import {
+  DATA_FILENAME,
+  DATA_HEADERS,
+  CSV_SEPARATOR,
+  INTERVAL,
+  DATE_FORMAT_WITH_SECONDS,
+} from './constants'
 import fs from 'fs'
 import os from 'os'
 import { Data } from './types'
-import { formatDate } from './utils'
+import { clamp, formatDate } from './utils'
 import { getBatteryLevel, getDisplayBrightness, getIsCharging, getIsLidClosed } from './commands'
 
 const writeDataToFile = (data: Data, filename: string) => {
@@ -22,7 +28,7 @@ const writeDataToFile = (data: Data, filename: string) => {
 
 const cronFn = () => {
   const data: Data = [
-    formatDate(moment(), DATE_FORMAT),
+    formatDate(moment(), DATE_FORMAT_WITH_SECONDS),
     getIsCharging(),
     getDisplayBrightness(),
     getIsLidClosed(),
@@ -31,4 +37,5 @@ const cronFn = () => {
   writeDataToFile(data, DATA_FILENAME)
 }
 
-export const cronJob = new CronJob('1 * * * * *', cronFn, null, false)
+export const cronJob = (interval: number): CronJob =>
+  new CronJob(`*/${clamp(INTERVAL.MIN, INTERVAL.MAX, interval)} * * * * *`, cronFn, null, false)

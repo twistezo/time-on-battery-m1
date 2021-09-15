@@ -42,3 +42,6 @@ export const durationToHoursAndMinutes = (duration: number): HoursAndMinutes => 
 }
 
 export const stringToBoolean = (value: string): boolean => value.toLowerCase() === 'true'
+
+export const clamp = (min: number, max: number, value: number): number =>
+  Math.max(min, Math.min(value, max))
