@@ -90,7 +90,7 @@ Options:
 
 ### A few hours after charging
 
-<img src="https://imgur.com/Z4dvV9b.png">
+<img src="https://imgur.com/Q1omUus.png">
 
 ### While charging
 
